@@ -17,13 +17,15 @@ export const addTodoTool = createTool({
   inputSchema: addInputSchema,
   outputSchema: todoItemSchema,
   execute: async ({ context }) => {
+    
     const newTodo: TodoItem = {
       id: generateId(),
       text: context.text,
       completed: false,
-      createdAt: new Date()
+      createdAt: new Date().toString()
     };
     todos.set(newTodo.id, newTodo);
+
     return newTodo;
   }
 });

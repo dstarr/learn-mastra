@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { Agent } from "@mastra/core/agent";
-import { tools } from "../tools";
+import { tools } from "./tools";
 
 export const todoAgent = new Agent({
   name: "To Do Agent",

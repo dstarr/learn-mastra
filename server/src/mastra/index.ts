@@ -12,6 +12,7 @@ export const mastra = new Mastra({
   },
   workflows: {
     interviewWorkflow: workflows.interviewWorkflow,
+    todoWorkflow: workflows.todoWorkflow,
   },
   logger: createLogger({
     name: 'Mastra',
