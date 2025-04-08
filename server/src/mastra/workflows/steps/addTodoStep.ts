@@ -1,6 +1,7 @@
 import { Step } from "@mastra/core/workflows";
 import { z } from "zod";
 import { todoAgent } from "../../agents/todoAgent";
+import { todoItemSchema } from "../../agents/tools/todo/schema";
 
 const addTodoStepInputSchema = z.object({
   todoText: z.string(),
@@ -31,21 +32,12 @@ export const addTodoStep = new Step({
 
     // Use the todoAgent with very specific instructions
     const prompt = `Add a new todo with the text: "${todoText}"
-                    Then return ONLY the added todo item as a JSON object with these fields:
-                    {
-                      "id": "the-id-of-the-todo",
-                      "text": "${todoText}",
-                      "completed": false,
-                      "createdAt": "formatted date string"
-                    }`;
+                    Then return ONLY the added todo item as a JSON object.`;
 
     // Use the agent with structured output
     const res = await todoAgent.generate(prompt, {
       output: z.object({
-        id: z.string(),
-        text: z.string(),
-        completed: z.boolean(),
-        createdAt: z.string(),
+        todoItem: todoItemSchema
       })
     });
 

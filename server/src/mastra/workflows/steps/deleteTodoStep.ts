@@ -27,10 +27,10 @@ export const deleteTodoStep = new Step({
     }
 
     const prompt = `Delete todo with ID: "${todoId}"
-Then return ONLY a JSON object with a success field like this:
-{
-  "success": true
-}`;
+                    Then return ONLY a JSON object with a success field like this:
+                    {
+                      "success": true
+                    }`;
 
     // Use the agent with structured output
     const res = await todoAgent.generate(prompt, {
