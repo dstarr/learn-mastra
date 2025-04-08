@@ -2,18 +2,17 @@ import { Workflow } from "@mastra/core/workflows";
 import { z } from "zod";
 import steps from "./steps";
 
-export const todoWorkflow = new Workflow({
-  name: "todo-workflow",
-  triggerSchema: z.object({
-    operation: z.enum(["add", "update", "delete", "list"]),
-    todoText: z.string().optional(),
-    todoId: z.string().optional(),
-    completed: z.boolean().optional(),
-  }),
+const triggerSchema = z.object({
+  operation: z.enum(["add", "update", "delete", "list"]),
+  todoText: z.string().optional(),
+  todoId: z.string().optional(),
+  completed: z.boolean().optional(),
 });
 
-// Set up conditional execution of steps based on operation
-todoWorkflow
+export const todoWorkflow = new Workflow({
+    name: "todo-workflow",
+    triggerSchema,
+  })
   .step(steps.addTodoStep, {
     when: { "trigger.operation": "add" },
   })
@@ -42,4 +41,4 @@ todoWorkflow
   .after(steps.deleteTodoStep)
   .step(steps.listTodosStep);
 
-todoWorkflow.commit(); 
+todoWorkflow.commit();

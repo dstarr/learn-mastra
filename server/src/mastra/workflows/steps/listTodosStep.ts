@@ -1,7 +1,7 @@
 import { Step } from "@mastra/core/workflows";
 import { z } from "zod";
 import { todoAgent } from "../../agents/todoAgent";
-import { listOutputSchema } from "../../agents/tools/todo/schema";
+import { listOutputSchema } from "../../tools/todo/schema";
 
 const listTodosStepInputSchema = z.object({});
 
