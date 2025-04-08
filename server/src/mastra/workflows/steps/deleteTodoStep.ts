@@ -16,7 +16,7 @@ export const deleteTodoStep = new Step({
   outputSchema: deleteTodoStepOutputSchema,
   execute: async ({ context }) => {
 
-    console.log("🔍 DELETE TODO STEP";
+    console.log("🔍 DELETE TODO STEP");
 
     const todoId = context?.getStepResult<{
       todoId: string;
