@@ -1,5 +1,5 @@
 import { createTool } from '@mastra/core/tools';
-import { TodoItem } from "./ITodoItem";
+import { ITodoItem } from "./ITodoItem";
 import { todoItemSchema, updateInputSchema } from "./schema";
 import { todos } from "./inMemoryStorage";
 

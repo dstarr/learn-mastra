@@ -1,8 +1,7 @@
-import { UUID } from "crypto";
 
 // Types and schemas
-export interface TodoItem {
-    id: UUID;
+export interface ITodoItem {
+    id: string;
     text: string;
     completed: boolean;
     createdAt: Date;
