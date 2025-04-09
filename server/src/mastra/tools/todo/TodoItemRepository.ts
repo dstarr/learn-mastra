@@ -46,14 +46,7 @@ export default class TodoItemRepository {
         return this.client.db(this.dbName).collection<ITodoItem>(this.collectionName);
     }
 
-    async create(text: string): Promise<ITodoItem> {
-
-        const todoItem: ITodoItem = {
-            id: randomUUID().toString(),
-            text: text,
-            completed: false,
-            createdAt: new Date()
-        };
+    async create(todoItem: ITodoItem): Promise<ITodoItem> {
 
         const collection = await this.getCollection();
         const result = await collection.insertOne(todoItem);

@@ -15,10 +15,11 @@ export const deleteInputSchema = z.object({
   });
   
 export const todoItemSchema = z.object({
+    _id: z.string().optional(),
     id: z.string(),
     text: z.string(),
     completed: z.boolean(),
-    createdAt: z.date()
+    createdAt: z.date(),
   });
   
 export const listOutputSchema = z.array(todoItemSchema);

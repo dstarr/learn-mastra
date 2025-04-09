@@ -2,6 +2,7 @@ import { createTool } from '@mastra/core/tools';
 import { ITodoItem } from "./ITodoItem";
 import { addInputSchema, todoItemSchema } from "./schema";
 import TodoItemRepository from './TodoItemRepository';
+import { randomUUID } from 'crypto';
 
 
 // Helper function
@@ -27,16 +28,23 @@ export const addTodoTool = createTool({
   inputSchema: addInputSchema,
   outputSchema: todoItemSchema,
   execute: async ({ context }) => {
-    
+
+    const todoItem: ITodoItem = {
+      id: randomUUID().toString(),
+      text: context.text,
+      completed: false,
+      createdAt: new Date()
+    };
+
     const todoItemRepository = new TodoItemRepository();
     await todoItemRepository.connect();
-  
-    const result = await todoItemRepository.create(context.text);
-  
+
+    const result = await todoItemRepository.create(todoItem);
+
     console.log('✅ Todo item added to repository:', result);
-  
+
     await todoItemRepository.disconnect();
-  
+
     return result;
   }
 });

@@ -2,22 +2,17 @@ import { Step } from "@mastra/core/workflows";
 import { z } from "zod";
 import { todoAgent } from "../../agents/todoAgent";
 import { todoItemSchema } from "../../tools/todo/schema";
+import { todo } from "node:test";
 
 const addTodoStepInputSchema = z.object({
   todoText: z.string(),
 });
 
-const addTodoStepOutputSchema = z.object({
-  id: z.string(),
-  text: z.string(),
-  completed: z.boolean(),
-  createdAt: z.string(), // Changed to string to match the formatted date
-});
 
 export const addTodoStep = new Step({
   id: "addTodoStep",
   inputSchema: addTodoStepInputSchema,
-  outputSchema: addTodoStepOutputSchema,
+  outputSchema: todoItemSchema,
   execute: async ({ context }) => {
     
     console.log("🔍 ADD TODO STEP");
@@ -36,9 +31,7 @@ export const addTodoStep = new Step({
 
     // Use the agent with structured output
     const res = await todoAgent.generate(prompt, {
-      output: z.object({
-        todoItem: todoItemSchema
-      })
+      output: todoItemSchema
     });
 
     // If the agent successfully returned a structured object
