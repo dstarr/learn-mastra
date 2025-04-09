@@ -18,7 +18,7 @@ export const todoItemSchema = z.object({
     id: z.string(),
     text: z.string(),
     completed: z.boolean(),
-    createdAt: z.string()
+    createdAt: z.date()
   });
   
 export const listOutputSchema = z.array(todoItemSchema);
