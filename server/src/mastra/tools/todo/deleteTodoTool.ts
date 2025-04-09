@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTool } from '@mastra/core/tools';
 import { deleteInputSchema } from "./schema";
-import { todos } from "./inMemoryStorage";
+import TodoItemRepository from "./TodoItemRepository";
 
 export const deleteTodoTool = createTool({
   id: 'delete-todo',
@@ -9,11 +9,18 @@ export const deleteTodoTool = createTool({
   inputSchema: deleteInputSchema,
   outputSchema: z.object({ success: z.boolean() }),
   execute: async ({ context }) => {
-    if (!todos.has(context.id)) {
-      throw new Error(`Todo with ID '${context.id}' not found`);
-    }
     
-    todos.delete(context.id);
-    return { success: true };
+    const todoItemRepository = new TodoItemRepository();
+    await todoItemRepository.connect();
+
+    const result = await todoItemRepository.delete(context.id);
+
+    console.log('✅ Todo item deleted from repository:', result);
+
+    await todoItemRepository.disconnect();
+
+    return {
+      success: result
+    };
   }
 }); 

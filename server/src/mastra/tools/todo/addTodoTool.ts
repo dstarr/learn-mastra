@@ -27,33 +27,16 @@ export const addTodoTool = createTool({
   inputSchema: addInputSchema,
   outputSchema: todoItemSchema,
   execute: async ({ context }) => {
-
-    return await addTodoToRepository(context.text);
-
+    
+    const todoItemRepository = new TodoItemRepository();
+    await todoItemRepository.connect();
+  
+    const result = await todoItemRepository.create(context.text);
+  
+    console.log('✅ Todo item added to repository:', result);
+  
+    await todoItemRepository.disconnect();
+  
+    return result;
   }
 });
-
-
-/**
- * Adds a new todo item to the repository.
- *
- * This function connects to the `TodoItemRepository`, creates a new todo item
- * with the provided text, logs the result, and then disconnects from the repository.
- *
- * @param text - The text content of the todo item to be added.
- * @returns A promise that resolves to the created `ITodoItem`.
- * @throws An error if the repository connection or creation process fails.
- */
-async function addTodoToRepository(text: string): Promise<ITodoItem> {
-
-  const todoItemRepository = new TodoItemRepository();
-  await todoItemRepository.connect();
-
-  const result = await todoItemRepository.create(text);
-
-  console.log('Todo item added to repository:', result);
-
-  await todoItemRepository.disconnect();
-
-  return result;
-}

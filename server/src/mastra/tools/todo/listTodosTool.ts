@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { createTool } from '@mastra/core/tools';
 import { listOutputSchema } from "./schema";
-import { todos } from "./inMemoryStorage";
+import { ITodoItem } from "./ITodoItem";
+import { TodoItemRepository } from "./TodoItemRepository";
 
 export const listTodosTool = createTool({
   id: 'list-todos',
@@ -9,6 +10,14 @@ export const listTodosTool = createTool({
   inputSchema: z.object({}),
   outputSchema: listOutputSchema,
   execute: async () => {
-    return Array.from(todos.values());
+    
+    const repository = new TodoItemRepository();
+    await repository.connect();
+    
+    const result = await repository.getAll();
+    
+    await repository.disconnect();
+    return result;
   }
 }); 
+
