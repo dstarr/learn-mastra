@@ -61,9 +61,6 @@ export const gatherCandidateInfoStep = new Step({
             "${resumeText}"
           `;
     const result = await recruiterAgent.generate(prompt, recruiterAgentOutputScema);
-    if (!result) {
-      throw new Error("Failed to gather candidate information");
-    }
 
     return result.object;
   },
