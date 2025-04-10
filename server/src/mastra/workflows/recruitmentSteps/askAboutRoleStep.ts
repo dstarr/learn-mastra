@@ -35,6 +35,8 @@ export const askAboutRoleStep = new Step({
       const prompt = `
             You are a recruiter. Given the resume below, craft a short question
             for ${candidateInfo?.candidateName} asking what interests them most about this role.
+            Acknowlodge that they are a ${candidateInfo?.specialty} and ask them to elaborate on their experience.
+            Acknolowledge they are not a technical candidate.
             Resume: ${candidateInfo?.resumeText}
           `;
       const res = await recruiterAgent.generate(prompt);

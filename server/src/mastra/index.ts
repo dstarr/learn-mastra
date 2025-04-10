@@ -6,12 +6,11 @@ import workflows from './workflows';
 
 export const mastra = new Mastra({
   agents: { 
-    weatherAgent: agents.weatherAgent,
     todoAgent: agents.todoAgent,
     recruiterAgent: agents.recruiterAgent,
   },
   workflows: {
-    interviewWorkflow: workflows.interviewWorkflow,
+    recruitmentWorkflow: workflows.recruitmentWorkflow,
     todoWorkflow: workflows.todoWorkflow,
   },
   logger: createLogger({
