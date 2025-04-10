@@ -1,13 +1,18 @@
 import { createTool } from '@mastra/core/tools';
-import { ITodoItem } from "./ITodoItem";
-import { addInputSchema, todoItemSchema } from "./schema";
-import TodoItemRepository from './TodoItemRepository';
+import { ITodoItem } from "../../../todo/ITodoItem";
+import { todoItemSchema } from "../../../todo/schema";
+import TodoItemRepository from '../../../todo/TodoItemRepository';
 import { randomUUID } from 'crypto';
+import { z } from 'zod';
 
-
-// Helper function
-const generateId = () => Math.random().toString(36).substring(2, 15);
-
+/**
+ * This schema ensures that the input object contains a `text` property,
+ * which must be a string. The `text` property represents the content
+ * of the todo item to be added.
+ */
+const addTodoToolInputSchema = z.object({
+  text: z.string().describe("Todo item text")
+});
 
 /**
  * A tool for adding a new todo item to the repository.
@@ -25,9 +30,14 @@ const generateId = () => Math.random().toString(36).substring(2, 15);
 export const addTodoTool = createTool({
   id: 'add-todo',
   description: 'Add a new todo item',
-  inputSchema: addInputSchema,
+  inputSchema: addTodoToolInputSchema,
   outputSchema: todoItemSchema,
   execute: async ({ context }) => {
+
+    console.log("🛠️ ADD TODO TOOL");
+
+    let result: ITodoItem | null = null;
+    const todoItemRepository = new TodoItemRepository();
 
     const todoItem: ITodoItem = {
       id: randomUUID().toString(),
@@ -36,14 +46,25 @@ export const addTodoTool = createTool({
       createdAt: new Date()
     };
 
-    const todoItemRepository = new TodoItemRepository();
-    await todoItemRepository.connect();
 
-    const result = await todoItemRepository.create(todoItem);
+    try {
 
-    console.log('✅ Todo item added to repository:', result);
+      await todoItemRepository.connect();
 
-    await todoItemRepository.disconnect();
+      result = await todoItemRepository.create(todoItem);
+      if (!result) {
+        throw new Error('Failed to create todo item');
+      }
+
+      console.log('✅ Todo item added to repository:', result);
+
+
+    } catch (error) {
+      console.error('❌ Error adding todo item to repository:', error);
+      throw new Error('Failed to add todo item');
+    } finally {
+      await todoItemRepository.disconnect();
+    }
 
     return result;
   }

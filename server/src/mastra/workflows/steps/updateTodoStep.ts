@@ -1,82 +1,63 @@
 import { Step } from "@mastra/core/workflows";
 import { z } from "zod";
-import { todoAgent } from "../../agents/todoAgent";
+import { todoItemSchema } from "../../../todo/schema";
+import TodoItemRepository from "../../../todo/TodoItemRepository";
+import { ITodoItem } from "../../../todo/ITodoItem";
 
 const updateTodoStepInputSchema = z.object({
-  todoId: z.string(),
-  todoText: z.string().optional(),
-  completed: z.boolean().optional(),
-});
-
-const updateTodoStepOutputSchema = z.object({
   id: z.string(),
-  text: z.string(),
-  completed: z.boolean(),
-  createdAt: z.string(),
+  text: z.string().optional(),
+  completed: z.boolean().optional(),
 });
 
 export const updateTodoStep = new Step({
   id: "updateTodoStep",
   inputSchema: updateTodoStepInputSchema,
-  outputSchema: updateTodoStepOutputSchema,
+  outputSchema: todoItemSchema,
   execute: async ({ context }) => {
-    
+
     console.log("🔍 UPDATE TODO STEP");
+    console.debug(`🔍 ${JSON.stringify(context.triggerData)}`);
 
-    const triggerData = context?.getStepResult<{
-      todoId: string;
-      todoText?: string;
-      completed?: boolean;
-    }>("trigger");
+    const triggerData: z.infer<typeof updateTodoStepInputSchema> = context.triggerData;
 
-    if (!triggerData?.todoId) {
-      throw new Error("Todo ID is required");
+    if (!triggerData.id) {
+      throw new Error("ID is required");
     }
 
-    let prompt = `Update todo with ID: "${triggerData.todoId}"`;
-    
-    if (triggerData.todoText) {
-      prompt += ` with new text: "${triggerData.todoText}"`;
-    }
-    
-    if (triggerData.completed !== undefined) {
-      prompt += ` and set completed to: ${triggerData.completed}`;
-    }
-    
-    prompt += `\nThen return ONLY the updated todo item as a JSON object with these fields:
-{
-  "id": "${triggerData.todoId}",
-  "text": "the updated text",
-  "completed": true or false,
-  "createdAt": "formatted date string"
-}`;
+    const todoItemRepository = new TodoItemRepository();
 
-    const res = await todoAgent.generate(prompt, {
-      output: z.object({
-        id: z.string(),
-        text: z.string(),
-        completed: z.boolean(),
-        createdAt: z.string(),
-      })
-    });
-
-    if (res.object) {
-      return res.object;
-    }
-    
-    const responseText = res.toString();
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-    
-    if (!jsonMatch) {
-      throw new Error("Could not parse todo from response");
-    }
-    
     try {
-      const todoObject = JSON.parse(jsonMatch[0]);
-      return todoObject;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      throw new Error("Failed to parse todo JSON: " + errorMessage);
+
+      await todoItemRepository.connect();
+
+      const existingTodoItem = await todoItemRepository.getById(triggerData.id);
+
+      if (!existingTodoItem) {
+        throw new Error(`Todo item with id ${triggerData.id} not found`);
+      }
+
+      const updatedText = triggerData.text ?? existingTodoItem.text; // Use fallback if null
+      const updatedCompleted = triggerData.completed ?? existingTodoItem.completed; // Use fallback if null
+
+      const updatedTodoItem: ITodoItem = {
+        ...existingTodoItem, // keep the original id and createdAt values
+        text: updatedText,
+        completed: updatedCompleted,
+      };
+
+      const result: boolean = await todoItemRepository.update(updatedTodoItem.id, updatedTodoItem);
+      if (!result) {
+        throw new Error(`Failed to update todo item with id ${updatedTodoItem.id}`);
+      }
+
+      console.log('✅ Todo item updated in repository:', result);
+
+      return updatedTodoItem;
+
+    } finally {
+      await todoItemRepository.disconnect();
     }
-  },
-}); 
+
+  }
+});
