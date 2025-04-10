@@ -1,10 +1,10 @@
 import { gatherCandidateInfoStep } from "./gatherCandidateInfoStep";
-import { askAboutSpecialty } from "./askAboutSpecialty";
-import { askAboutRole } from "./askAboutRole";
+import { askAboutSpecialtyStep } from "./askAboutSpecialtyStep";
+import { askAboutRoleStep } from "./askAboutRoleStep";
 
 export default {
   gatherCandidateInfoStep,
-  askAboutSpecialty,
-  askAboutRole,
+  askAboutSpecialty: askAboutSpecialtyStep,
+  askAboutRole: askAboutRoleStep,
 };
 
