@@ -18,12 +18,18 @@ export const gatherCandidateInfoStep = new Step({
   inputSchema: gatherCandidateInfoStepInputSchema,
   outputSchema: gatherCandidateInfoStepOutputSchema,
   execute: async ({ context }) => {
-    const resumeText = context?.getStepResult<{
-      resumeText: string;
-    }>("trigger")?.resumeText;
+
+    console.log("🔍 GATHER CANDIDATE INFO STEP");
+    
+    const triggerData: z.infer<typeof gatherCandidateInfoStepInputSchema> = context.triggerData;
+    const resumeText = triggerData.resumeText;
 
     const prompt = `
-            Extract details from the resume text:
+            Extract details from thefollowing resume text.
+            Look for and return the following if present.
+            - Candidate name
+            - If the candidate is technical
+            - Candidate specialty
             "${resumeText}"
           `;
 

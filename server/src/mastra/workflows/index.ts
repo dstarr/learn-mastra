@@ -1,7 +1,7 @@
-import { interviewWorkflow } from "./interviewWorkflow";
+import { recruitmentWorkflow } from "./recruitmentWorkflow";
 import { todoWorkflow } from "./todoWorkflow";
 
 export default {
-  interviewWorkflow: interviewWorkflow,
+  interviewWorkflow: recruitmentWorkflow,
   todoWorkflow: todoWorkflow,
 };
