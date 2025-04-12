@@ -1,5 +1,6 @@
 import { todoAgent } from "./todoAgent";
 import { recruiterAgent } from "./recuiterAgent";
+import { githubAgent } from "./githubAgent";
 
 /**
  * This module exports the agents used in the application.
@@ -7,4 +8,5 @@ import { recruiterAgent } from "./recuiterAgent";
 export default {
   todoAgent: todoAgent,
   recruiterAgent: recruiterAgent,
+  githubAgent: githubAgent,
 };

@@ -8,6 +8,7 @@ export const mastra = new Mastra({
   agents: { 
     todoAgent: agents.todoAgent,
     recruiterAgent: agents.recruiterAgent,
+    githubAgent: agents.githubAgent,
   },
   workflows: {
     recruitmentWorkflow: workflows.recruitmentWorkflow,
