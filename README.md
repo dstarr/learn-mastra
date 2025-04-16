@@ -17,6 +17,8 @@ The only model provider supported at this time is OpenAI.
 2. Run `npm install`
 3. Create a `.env` file in the `server` directory and add the following environmental variables.
    
+> **Note:** The current implementation requires both a MongoDB instance for storing To Do items and a Postgres DB for maintaining Agent interaction memory. This is temprary until the MongoDB adapter for mastra ships. 
+   
 ```bash
   # Azure Cosmos DB settings - Cosmos deployed as MongoDB
   AZURE_COSMOS_DB_CS=YOUR_CONNECTION_STRING
@@ -41,7 +43,7 @@ The only model provider supported at this time is OpenAI.
   POSTGRES_DB=YOUR_TABLE_NAME
 ```
 
-4. Run `npm run dev`
+1. Run `npm run dev`
 
 ## Using the Todo item Agent
 
@@ -49,13 +51,13 @@ This application enables CRUD operations on a todo list held in a MongoDB and su
 
 The todo items connection should work with a standard Mongo DB server, but this hasn't been tested.
 
-> Note: To enable the memory capability of the To Do agent, you must have the role `postgres` added to your table that stores chat memory. The schema will be created for you.
+> **Note:** To enable the memory capability of the To Do agent, you must have the role `postgres` added to your table that stores chat memory. The schema will be created for you.
 
 ## Using the GitHub Agent with MCP Server
 
 The GitHub Agent uses the GitHub MCP server which runs in a docker container. To enable this agent, you must have docker installed and the daemon must be running.
 
-> Note: The `GITHUB_TOKEN` value is the key from a token you may [create on GitHub here](https://github.com/settings/personal-access-tokens/new).
+> **Note:** The `GITHUB_TOKEN` value is the key from a token you may [create on GitHub here](https://github.com/settings/personal-access-tokens/new).
 
 More information available at the [GitHub MCP Server repo](https://github.com/github/github-mcp-server).
 
