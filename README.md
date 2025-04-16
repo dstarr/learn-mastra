@@ -29,6 +29,13 @@ The only model provider supported at this time is OpenAI.
 
     # GitHub token to use the GitHub MCP server
     GITHUB_TOKEN=YOUR_GITHUB_TOKEN
+
+    # Postgres settings
+    POSTGRES_HOST=localhost
+    POSTGRES_PORT=5432
+    POSTGRES_USER=YOUR_USER_NAME
+    POSTGRES_PASSWORD=postgres
+    POSTGRES_DB=YOUR_TABLE_NAME
     ```
 
 4. Run `npm run dev`
@@ -37,13 +44,15 @@ The only model provider supported at this time is OpenAI.
 
 This application enables CRUD operations on a todo list held in a MongoDB and surfaced through AI agents, tools, and workflows. The DB used today is a Cosmos DB on Azure using the Mongo configuration.
 
-The connection should work with a standard Mongo DB server, but this hasn't been tested.
+The todo items connection should work with a standard Mongo DB server, but this hasn't been tested.
+
+> Note: To enable the memory capability of the To Do agent, you must have the role `postgres` added to your table that stores chat memory. The schema will be created for you.
 
 ## Using the GitHub Agent with MCP Server
 
 The GitHub Agent uses the GitHub MCP server which runs in a docker container. To enable this agent, you must have docker installed and the daemon must be running.
 
-The `GITHUB_TOKEN` value is the key from a token you may [create on GitHub here](https://github.com/settings/personal-access-tokens/new).
+> Note: The `GITHUB_TOKEN` value is the key from a token you may [create on GitHub here](https://github.com/settings/personal-access-tokens/new).
 
 More information available at the [GitHub MCP Server repo](https://github.com/github/github-mcp-server).
 
