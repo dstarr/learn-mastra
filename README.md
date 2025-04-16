@@ -17,26 +17,29 @@ The only model provider supported at this time is OpenAI.
 2. Run `npm install`
 3. Create a `.env` file in the `server` directory and add the following environmental variables.
    
-    ```bash
-    # Azure Cosmos DB settings - Cosmos deployed as MongoDB
-    AZURE_COSMOS_DB_CS=YOUR_CONNECTION_STRING
-    AZURE_COSMOS_DB_DATABASE=YOUR_DATABASE_NAME # 
-    AZURE_COSMOS_DB_COLLECTION=YOUR_COLLECTION_NAME
+```bash
+  # Azure Cosmos DB settings - Cosmos deployed as MongoDB
+  AZURE_COSMOS_DB_CS=YOUR_CONNECTION_STRING
+  AZURE_COSMOS_DB_DATABASE=YOUR_DATABASE_NAME # 
+  AZURE_COSMOS_DB_COLLECTION=YOUR_COLLECTION_NAME
 
-    # Open AI settings
-    OPENAI_API_KEY=YOUR_OPENAI_KEY
-    OPENAI_MODEL=THE_OPENAI_MODEL_NAME
+  # Open AI settings
+  OPENAI_API_KEY=YOUR_OPENAI_KEY
+  OPENAI_MODEL=THE_OPENAI_MODEL_NAME
 
-    # GitHub token to use the GitHub MCP server
-    GITHUB_TOKEN=YOUR_GITHUB_TOKEN
+  # GitHub token to use the GitHub MCP server
+  GITHUB_TOKEN=YOUR_GITHUB_TOKEN
 
-    # Postgres settings
-    POSTGRES_HOST=localhost
-    POSTGRES_PORT=5432
-    POSTGRES_USER=YOUR_USER_NAME
-    POSTGRES_PASSWORD=postgres
-    POSTGRES_DB=YOUR_TABLE_NAME
-    ```
+  # Postgres settings
+  # Needed because we are using the postgres adapter for the working memory
+  # and mastra does not yet support MongoDB as a vector database
+  # This is a temporary solution until we have a MongoDB adapter for the working memory
+  POSTGRES_HOST=localhost
+  POSTGRES_PORT=5432
+  POSTGRES_USER=YOUR_USER_NAME
+  POSTGRES_PASSWORD=postgres
+  POSTGRES_DB=YOUR_TABLE_NAME
+```
 
 4. Run `npm run dev`
 
