@@ -21,7 +21,7 @@ const mcp = new MCPConfiguration({
       }
   },
 });
- 
+
 // Create an agent with access to all tools
 export const githubAgent = new Agent({
   name: "Github Agent Agent",
