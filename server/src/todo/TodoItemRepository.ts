@@ -7,7 +7,7 @@ import { ITodoItem } from './ITodoItem';
  * This class provides methods to connect to the database, create, retrieve, update, and delete todo items.
  * It uses the MongoDB Node.js driver to interact with the database.
  */
-export default class TodoItemRepository {
+export default class TodoItemMongoRepository {
 
     private client: MongoClient;
     private dbName: string;
@@ -157,4 +157,4 @@ export default class TodoItemRepository {
     }
 }
 
-export { TodoItemRepository };
+export { TodoItemMongoRepository as TodoItemRepository };

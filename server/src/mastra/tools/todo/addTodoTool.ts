@@ -1,7 +1,7 @@
 import { createTool } from '@mastra/core/tools';
 import { ITodoItem } from "../../../todo/ITodoItem";
 import { todoItemSchema } from "../../../todo/schema";
-import TodoItemRepository from '../../../todo/TodoItemRepository';
+import TodoItemPostgreRepository from '../../../todo/TodoItemPostgreRepository';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
 import config from '../../../config';
@@ -38,23 +38,23 @@ export const addTodoTool = createTool({
     console.log("🛠️ ADD TODO TOOL");
 
     let result: ITodoItem | null = null;
-    const todoItemRepository = new TodoItemRepository(config.Mongo.connectionString, config.Mongo.databaseName, config.Mongo.collectionName);
-
+    
     const todoItem: ITodoItem = {
       id: randomUUID().toString(),
       text: context.text,
       completed: false,
       createdAt: new Date()
     };
-
-
+    
+    const todoItemRepository = new TodoItemPostgreRepository({
+      dbConfig: config.Postgres,
+    });
+    
     try {
-
-      await todoItemRepository.connect();
-
+      
       result = await todoItemRepository.create(todoItem);
       if (!result) {
-        throw new Error('Failed to create todo item');
+        throw new Error('Failed to create todo item: result is null');
       }
 
       console.log('✅ Todo item added to repository:', result);

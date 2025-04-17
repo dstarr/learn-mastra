@@ -1,7 +1,7 @@
 import { Step } from "@mastra/core/workflows";
 import { z } from "zod";
 import { todoItemSchema } from "../../../todo/schema";
-import TodoItemRepository from "../../../todo/TodoItemRepository";
+import TodoItemMongoRepository from "../../../todo/TodoItemRepository";
 import { ITodoItem } from "../../../todo/ITodoItem";
 
 const updateTodoStepInputSchema = z.object({
@@ -25,7 +25,7 @@ export const updateTodoStep = new Step({
       throw new Error("ID is required");
     }
 
-    const todoItemRepository = new TodoItemRepository();
+    const todoItemRepository = new TodoItemMongoRepository();
 
     try {
 

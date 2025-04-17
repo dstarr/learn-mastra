@@ -1,6 +1,6 @@
 import { Step } from "@mastra/core/workflows";
 import { z } from "zod";
-import TodoItemRepository from "../../../todo/TodoItemRepository";
+import TodoItemMongoRepository from "../../../todo/TodoItemRepository";
 import { todoItemSchema } from "../../../todo/schema";
 
 const listTodosStepInputSchema = z.object({});
@@ -15,7 +15,7 @@ export const listTodosStep = new Step({
   execute: async () => {
     console.log("🔍 LIST TODOS STEP");
 
-    const repository = new TodoItemRepository();
+    const repository = new TodoItemMongoRepository();
     let result: z.infer<typeof listOutputSchema>;
 
     try {

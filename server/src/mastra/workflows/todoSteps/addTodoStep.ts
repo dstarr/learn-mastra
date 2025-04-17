@@ -1,7 +1,7 @@
 import { Step } from "@mastra/core/workflows";
 import { z } from "zod";
 import { todoItemSchema } from "../../../todo/schema";
-import TodoItemRepository from "../../../todo/TodoItemRepository";
+import TodoItemMongoRepository from "../../../todo/TodoItemRepository";
 
 const addTodoStepInputSchema = z.object({
   todoText: z.string(),
@@ -29,7 +29,7 @@ export const addTodoStep = new Step({
     const todoItem = createTodoItem(todoText);
 
     // Add the todo item to the database
-    const repository = new TodoItemRepository();
+    const repository = new TodoItemMongoRepository();
 
     try {
       await repository.connect();
