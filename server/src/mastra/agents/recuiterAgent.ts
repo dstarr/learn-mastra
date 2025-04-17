@@ -1,5 +1,6 @@
 import { Agent } from '@mastra/core/agent';
 import { openai } from "@ai-sdk/openai";
+import config from '../../config';
 
 /**
  * Represents an AI-powered recruiter agent designed to ask interview questions.
@@ -13,5 +14,5 @@ import { openai } from "@ai-sdk/openai";
 export const recruiterAgent = new Agent({
   name: "Recruiter Agent",
   instructions: `You are a recruiter asking interview questions.`,
-  model: openai(process.env.OPENAI_MODEL || "gpt-4o-mini"),
+  model: openai(config.OpenAI.model),
 });

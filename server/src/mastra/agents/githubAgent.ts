@@ -1,6 +1,7 @@
 import { MCPConfiguration } from "@mastra/mcp";
 import { Agent } from "@mastra/core/agent";
 import { openai } from "@ai-sdk/openai";
+import config from "../../config";
  
 const mcp = new MCPConfiguration({
   servers: {
@@ -16,7 +17,7 @@ const mcp = new MCPConfiguration({
           "ghcr.io/github/github-mcp-server"
         ],
         env: {
-          GITHUB_PERSONAL_ACCESS_TOKEN: process.env.GITHUB_TOKEN || "",
+          GITHUB_PERSONAL_ACCESS_TOKEN: config.GitHub.token
         }
       }
   },
@@ -26,6 +27,6 @@ const mcp = new MCPConfiguration({
 export const githubAgent = new Agent({
   name: "Github Agent Agent",
   instructions: "You have access to all GitHub tools allowing operations on repositories in GitHub.",
-  model: openai(process.env.OPENAI_MODEL || "gpt-4o-mini"),
+  model: openai(config.OpenAI.model),
   tools: await mcp.getTools(),
 });

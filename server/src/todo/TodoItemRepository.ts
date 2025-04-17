@@ -30,7 +30,9 @@ export default class TodoItemRepository {
         this.dbName = dbName;
         this.collectionName = collectionName;
 
-        this.client = new MongoClient(this.connectionString, {});
+        this.client = new MongoClient(this.connectionString);
+
+        
     }
 
     /**
@@ -114,6 +116,9 @@ export default class TodoItemRepository {
      * @throws {Error} If there is an issue with the database connection or retrieval.
      */
     async getAll(): Promise<ITodoItem[]> {
+
+        console.log('🛠️ Retrieving all todo items');
+
         return await (await this.getCollection()).find().toArray();
     }
 

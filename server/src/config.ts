@@ -4,25 +4,29 @@ import path from 'path';
 // Load environment variables from .env.development file
 dotenv.config();
 
-// Define the required environment variables
-const requiredEnvVars = [
-    'MONGODB_CS',
-    'MONGODB_DATABASE',
-    'MONGODB_COLLECTION',
-    'GITHUB_TOKEN',
-    'OPENAI_API_KEY',
-    'OPENAI_MODEL',
-    'POSTGRES_HOST',
-    'POSTGRES_PORT',
-    'POSTGRES_USER',
-    'POSTGRES_PASSWORD',
-    'POSTGRES_DB'
-];
+// Define the required environment variables as an enum
+enum RequiredEnvVars {
+    MONGODB_CS = 'MONGODB_CS',
+    MONGODB_DATABASE = 'MONGODB_DATABASE',
+    MONGODB_COLLECTION = 'MONGODB_COLLECTION',
+
+    GITHUB_TOKEN = 'GITHUB_TOKEN',
+    
+    OPENAI_API_KEY = 'OPENAI_API_KEY',
+    OPENAI_MODEL = 'OPENAI_MODEL',
+    
+    POSTGRES_HOST = 'POSTGRES_HOST',
+    POSTGRES_PORT = 'POSTGRES_PORT',
+    POSTGRES_USER = 'POSTGRES_USER',
+    POSTGRES_PASSWORD = 'POSTGRES_PASSWORD',
+    POSTGRES_DB = 'POSTGRES_DB',
+}
 
 // Validate required environment variables
 const missingVars: string[] = [];
 
-requiredEnvVars.forEach(varName => {
+// Use Object.values to iterate through enum values
+Object.values(RequiredEnvVars).forEach(varName => {
     if (!process.env[varName]) {
         missingVars.push(varName);
     }
@@ -62,9 +66,9 @@ interface Config {
 const config: Config = {
 
     Mongo: {
-        connectionString: process.env.MONGODB_DB_CS as string,
-        databaseName: process.env.MONGODB_DB_DATABASE as string,
-        collectionName: process.env.MONGODB_DB_COLLECTION as string,
+        connectionString: process.env.MONGODB_CS as string,
+        databaseName: process.env.MONGODB_DATABASE as string,
+        collectionName: process.env.MONGODB_COLLECTION as string,
     },
     GitHub: {
         token: process.env.GITHUB_TOKEN as string,

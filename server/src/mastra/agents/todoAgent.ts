@@ -3,23 +3,20 @@ import { Agent } from "@mastra/core/agent";
 import { Memory } from "@mastra/memory";
 import { PostgresStore, PgVector } from "@mastra/pg";
 import { tools } from "../tools";
+import config from "../../config";
 
 // PostgreSQL connection details
-const host = process.env.POSTGRES_HOST || "localhost";
-const port = parseInt(process.env.POSTGRES_PORT as string, 10) || 5432;
-const user = process.env.USERNAME || "postgres";
-const database = process.env.DB_NAME || "mastra";
-const password = process.env.POSTGRES_PASSWORD || "postgres";
-const connectionString = `postgresql://${user}:${password}@${host}:${port}`;
+const host = config.Postgres.host
+const port = config.Postgres.port;
+const user = config.Postgres.user;
+const database = config.Postgres.database;
+const password = config.Postgres.password;
+const connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
 
 // Initialize memory with PostgreSQL storage and vector search
 const memory = new Memory({
   storage: new PostgresStore({
-    host: host,
-    port: port,
-    user: user,
-    database: database,
-    password: password,
+    connectionString: connectionString,
   }),
   vector: new PgVector(connectionString),
   options: {
@@ -42,7 +39,7 @@ export const todoAgent = new Agent({
       Show the createdAt as local time in simple format
       When listing items, format the todos as a table.
 `,
-  model: openai(process.env.OPENAI_MODEL || 'gpt-3.5-turbo'),
+  model: openai(config.OpenAI.model),
   memory,
   tools: {
     addTodoTool: tools.addTodoTool,
