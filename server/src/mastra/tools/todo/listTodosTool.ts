@@ -36,8 +36,6 @@ export const listTodosTool = createTool({
     let result: z.infer<typeof listOutputSchema> | null = null;
     const repository = new TodoItemRepository(config.Mongo.connectionString, config.Mongo.databaseName, config.Mongo.collectionName);
 
-    console.log("🛠️ LIST TODO TOOL - REPOSITORY CREATED");
-
     try {
       await repository.connect();
 

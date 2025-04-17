@@ -31,8 +31,6 @@ export default class TodoItemRepository {
         this.collectionName = collectionName;
 
         this.client = new MongoClient(this.connectionString);
-
-        
     }
 
     /**
