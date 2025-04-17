@@ -30,7 +30,7 @@ const addTodoToolInputSchema = z.object({
  */
 export const addTodoTool = createTool({
   id: 'add-todo',
-  description: 'Add a new todo item',
+  description: 'Add a new todo item taking in a text string',
   inputSchema: addTodoToolInputSchema,
   outputSchema: todoItemSchema,
   execute: async ({ context }) => {
