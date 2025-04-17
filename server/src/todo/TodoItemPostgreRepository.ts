@@ -1,7 +1,7 @@
 import pkg, { QueryResult }  from 'pg';
 import { ITodoItem } from './ITodoItem';
 
-const { Pool } = pkg;
+const Pool = pkg.Pool;
 
 export interface PostgresConfig {
     host: string;
@@ -11,8 +11,8 @@ export interface PostgresConfig {
     database: string;
 }
 
-export type TodoItemPostgreOptions = {
-    pool?: typeof Pool;
+export type TodoItemPostgresOptions = {
+    pool?: pkg.Pool;
     dbConfig?: PostgresConfig;
 };
 
@@ -22,7 +22,7 @@ export default class TodoItemPostgreRepository {
     private readonly schema: string = 'todos';
     private readonly table: string = 'todo_items';
 
-    constructor(options: TodoItemPostgreOptions = {}) {
+    constructor(options: TodoItemPostgresOptions = {}) {
         const { pool, dbConfig } = options;
 
         if (!pool && !dbConfig) {
