@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { createTool } from '@mastra/core/tools';
-import { TodoItemRepository } from "../../../todo/TodoItemRepository";
 import { todoItemSchema } from "../../../todo/schema";
 import config from "../../../config";
+import TodoItemPostgreRepository from "../../../todo/TodoItemPostgreRepository";
 
 /**
  * This schema defines the structure of the input for the listTodosTool.
@@ -34,15 +34,18 @@ export const listTodosTool = createTool({
     console.log("🛠️ LIST TODO TOOL");
 
     let result: z.infer<typeof listOutputSchema> | null = null;
-    const repository = new TodoItemRepository(config.Mongo.connectionString, config.Mongo.databaseName, config.Mongo.collectionName);
+    
+    const repository = new TodoItemPostgreRepository({
+      dbConfig: config.Postgres,
+    });
 
     try {
-      await repository.connect();
-
+      
       result = await repository.getAll();
       if (!result) {
         throw new Error('Failed to retrieve todo items');
       }
+
     } catch (error) {
       console.error('❌ Error retrieving todo items:', error);
       throw new Error('Failed to list todo items');

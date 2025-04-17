@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTool } from '@mastra/core/tools';
-import TodoItemMongoRepository from "../../../todo/TodoItemRepository";
 import config from "../../../config";
+import TodoItemPostgreRepository from "../../../todo/TodoItemPostgreRepository";
 
 
 /**
@@ -54,18 +54,20 @@ export const deleteTodoTool = createTool({
     console.log("🛠️ DELETE TODO TOOL");
 
     let result: boolean;
-    const todoItemRepository = new TodoItemMongoRepository(config.Mongo.connectionString, config.Mongo.databaseName, config.Mongo.collectionName);
+    
+    const repository = new TodoItemPostgreRepository({
+      dbConfig: config.Postgres,
+    });
 
     try {
-      await todoItemRepository.connect();
-      result = await todoItemRepository.delete(context.id);
+      result = await repository.delete(context.id);
       console.log('✅ Todo item deleted from repository:', result);
     }
     catch (error) {
       console.error('❌ Error deleting todo item:', error);
       throw new Error(`Failed to delete todo item with id ${context.id}`);
     } finally {
-      await todoItemRepository.disconnect();
+      await repository.disconnect();
     }
 
     return { success: result };

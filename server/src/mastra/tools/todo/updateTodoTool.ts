@@ -1,8 +1,8 @@
 import { createTool } from '@mastra/core/tools';
 import { ITodoItem } from "../../../todo/ITodoItem";
-import TodoItemMongoRepository from '../../../todo/TodoItemRepository';
 import { z } from 'zod';
 import config from '../../../config';
+import TodoItemPostgreRepository from '../../../todo/TodoItemPostgreRepository';
 
 
 const updateTodoToolInputSchema = z.object({
@@ -51,14 +51,15 @@ export const updateTodoTool = createTool({
 
     console.log("🛠️ UPDATE TODO TOOL");
     
-    const todoItemRepository: TodoItemMongoRepository = new TodoItemMongoRepository(config.Mongo.connectionString, config.Mongo.databaseName, config.Mongo.collectionName);
+    const repository = new TodoItemPostgreRepository({
+      dbConfig: config.Postgres,
+    });
+
     let result: boolean = false;
     
     try {
 
-      await todoItemRepository.connect();
-
-      const currentTodoItem = await todoItemRepository.getById(context.id);
+      const currentTodoItem = await repository.getById(context.id);
 
       if (!currentTodoItem) {
         throw new Error(`Todo item with id ${context.id} not found`);
@@ -75,7 +76,7 @@ export const updateTodoTool = createTool({
         completed: updatedCompleted,
       };
 
-      result = await todoItemRepository.update(updatedTodoItem.id, updatedTodoItem);
+      result = await repository.update(updatedTodoItem.id, updatedTodoItem);
       if (!result) {
         throw new Error(`Failed to update todo item with id ${updatedTodoItem.id}`);
       }
@@ -86,7 +87,7 @@ export const updateTodoTool = createTool({
       console.error('Error updating todo item:', error);
       throw new Error(`Failed to update todo item: ${error}`);
     } finally {
-      await todoItemRepository.disconnect();
+      await repository.disconnect();
     }
 
     return { success: result };
