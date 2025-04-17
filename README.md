@@ -15,10 +15,12 @@ The only model provider supported at this time is OpenAI.
 
 1. Clone repo and cd into the `server` directory
 2. Run `npm install`
-3. Create a `.env` file in the `server` directory and add the following environmental variables.
+3. Create a `.env` file in the `server` directory as per [the below example](#environmental-variables) and add the environmental variables.
+4. Use [the below script](#todo-table-creation-script) to create a table in PostgresQL to store your todo items.
+5. Run `npm run dev`
    
-> **Note:** The current implementation requires both a MongoDB instance for storing To Do items and a Postgres DB for maintaining Agent interaction memory. This is temprary until the MongoDB adapter for mastra ships. 
-   
+### Environmental variables
+
 ```bash
   # Azure Cosmos DB settings - Cosmos deployed as MongoDB
   # DEPRECATED - MOVED TO POSTGRESQL
@@ -41,10 +43,19 @@ The only model provider supported at this time is OpenAI.
   POSTGRES_PORT=5432
   POSTGRES_USER=YOUR_USER_NAME
   POSTGRES_PASSWORD=postgres
-  POSTGRES_DB=YOUR_TABLE_NAME
+  POSTGRES_DB=YOUR_TODO_DB_NAME
 ```
 
-1. Run `npm run dev`
+### Todo table creation script
+
+```sql
+CREATE TABLE todo_items (
+    id UUID PRIMARY KEY,
+    text TEXT NOT NULL,
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+``` 
 
 ## Using the Todo item Agent
 
