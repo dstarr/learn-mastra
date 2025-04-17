@@ -2,6 +2,7 @@ import { createTool } from '@mastra/core/tools';
 import { ITodoItem } from "../../../todo/ITodoItem";
 import TodoItemRepository from '../../../todo/TodoItemRepository';
 import { z } from 'zod';
+import config from '../../../config';
 
 
 const updateTodoToolInputSchema = z.object({
@@ -50,7 +51,7 @@ export const updateTodoTool = createTool({
 
     console.log("🛠️ UPDATE TODO TOOL");
     
-    const todoItemRepository: TodoItemRepository = new TodoItemRepository();
+    const todoItemRepository: TodoItemRepository = new TodoItemRepository(config.Mongo.connectionString, config.Mongo.databaseName, config.Mongo.collectionName);
     let result: boolean = false;
     
     try {

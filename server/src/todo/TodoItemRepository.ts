@@ -14,16 +14,25 @@ export default class TodoItemRepository {
     private collectionName: string;
     private connectionString: string;
 
-    constructor() {
-
-        this.connectionString = process.env.AZURE_COSMOS_DB_CS as string
-        this.dbName = process.env.AZURE_COSMOS_DB_DATABASE as string;
-        this.collectionName = process.env.AZURE_COSMOS_DB_COLLECTION as string;
+    /**
+     * Creates a new TodoItemRepository instance.
+     * 
+     * @param {string} connectionString - MongoDB connection string, defaults to environment variable if not provided
+     * @param {string} dbName - Database name, defaults to environment variable if not provided
+     * @param {string} collectionName - Collection name, defaults to environment variable if not provided
+     */
+    constructor(
+        connectionString: string,
+        dbName: string,
+        collectionName: string
+    ) {
+        this.connectionString = connectionString;
+        this.dbName = dbName;
+        this.collectionName = collectionName;
 
         this.client = new MongoClient(this.connectionString, {});
     }
 
-    
     /**
      * Establishes a connection to the database.
      * 

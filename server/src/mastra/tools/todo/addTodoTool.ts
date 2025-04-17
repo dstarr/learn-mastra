@@ -4,6 +4,7 @@ import { todoItemSchema } from "../../../todo/schema";
 import TodoItemRepository from '../../../todo/TodoItemRepository';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
+import config from '../../../config';
 
 /**
  * This schema ensures that the input object contains a `text` property,
@@ -37,7 +38,7 @@ export const addTodoTool = createTool({
     console.log("🛠️ ADD TODO TOOL");
 
     let result: ITodoItem | null = null;
-    const todoItemRepository = new TodoItemRepository();
+    const todoItemRepository = new TodoItemRepository(config.Mongo.connectionString, config.Mongo.databaseName, config.Mongo.collectionName);
 
     const todoItem: ITodoItem = {
       id: randomUUID().toString(),

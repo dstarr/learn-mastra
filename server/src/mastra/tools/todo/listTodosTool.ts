@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTool } from '@mastra/core/tools';
 import { TodoItemRepository } from "../../../todo/TodoItemRepository";
 import { todoItemSchema } from "../../../todo/schema";
+import config from "../../../config";
 
 /**
  * This schema defines the structure of the input for the listTodosTool.
@@ -33,7 +34,7 @@ export const listTodosTool = createTool({
     console.log("🛠️ LIST TODO TOOL");
 
     let result: z.infer<typeof listOutputSchema> | null = null;
-    const repository = new TodoItemRepository();
+    const repository = new TodoItemRepository(config.Mongo.connectionString, config.Mongo.databaseName, config.Mongo.collectionName);
 
     try {
       await repository.connect();

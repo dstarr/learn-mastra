@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTool } from '@mastra/core/tools';
 import TodoItemRepository from "../../../todo/TodoItemRepository";
+import config from "../../../config";
 
 
 /**
@@ -53,7 +54,7 @@ export const deleteTodoTool = createTool({
     console.log("🛠️ DELETE TODO TOOL");
 
     let result: boolean;
-    const todoItemRepository = new TodoItemRepository();
+    const todoItemRepository = new TodoItemRepository(config.Mongo.connectionString, config.Mongo.databaseName, config.Mongo.collectionName);
 
     try {
       await todoItemRepository.connect();
